@@ -1,13 +1,16 @@
-# Descripcion
+## Descripcion
 ### Proyecto que corresponde a una pagina web como parte de la asignatura BPDS
 
-# Objetivos 
+## Objetivos 
 ### Diseñar una pagina web y aplicar principios de organizacion y mantenimiento del codigo 
 
-# Tecnologias utilizadas 
+## Tecnologias utilizadas 
 ### HTML5
 ### CSS
 ### JV
 ### Git
 ### GitHub
 ### Visual Studio Code
+
+## hola este es el nuevo cambio
+#### :D
