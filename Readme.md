@@ -1,4 +1,7 @@
 ## Descripcion
+### esto se debe quedar aqui
+
+# Descripcion
 ### Proyecto que corresponde a una pagina web como parte de la asignatura BPDS
 
 ## Objetivos 
