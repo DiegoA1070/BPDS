@@ -1,69 +1,156 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+
+type Todo = {
+  id: number;
+  text: string;
+  completed: boolean;
+};
 
 export default function Home() {
+  const [todos, setTodos] = useState<Todo[]>([
+    { id: 1, text: "First Example", completed: false },
+    { id: 2, text: "Second Example", completed: true },
+  ]);
+
+  const [newTodo, setNewTodo] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingText, setEditingText] = useState("");
+
+  // CREATE
+  const addTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && newTodo.trim() !== "") {
+      const todo: Todo = {
+        id: Date.now(),
+        text: newTodo.trim(),
+        completed: false,
+      };
+
+      setTodos([...todos, todo]);
+      setNewTodo("");
+    }
+  };
+
+  // UPDATE - TACHAR
+  const toggleTodo = (id: number) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      )
+    );
+  };
+
+  // EMPEZAR EDICIÓN
+  const startEditing = (todo: Todo) => {
+    setEditingId(todo.id);
+    setEditingText(todo.text);
+  };
+
+  // UPDATE - EDITAR TEXTO
+  const saveEdit = (id: number) => {
+    if (editingText.trim() === "") {
+      setEditingId(null);
+      return;
+    }
+
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id
+          ? { ...todo, text: editingText.trim() }
+          : todo
+      )
+    );
+
+    setEditingId(null);
+  };
+
+  // DELETE
+  const deleteTodo = (id: number) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="container">
+      <div className="todo-card">
+        <h1>Mis Tareas</h1>
+
+        <p className="subtitle">
+          Agrega, edita, tacha y elimina tus tareas.
+        </p>
+
+        <input
+          className="new-todo"
+          type="text"
+          placeholder="Escribe una tarea y presiona Enter..."
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+          onKeyDown={addTodo}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+
+        <div className="todo-list">
+          {todos.length === 0 ? (
+            <p className="empty">No hay tareas.</p>
+          ) : (
+            todos.map((todo) => (
+              <div className="todo-item" key={todo.id}>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => toggleTodo(todo.id)}
+                />
+
+                {editingId === todo.id ? (
+                  <input
+                    className="edit-input"
+                    type="text"
+                    value={editingText}
+                    autoFocus
+                    onChange={(e) =>
+                      setEditingText(e.target.value)
+                    }
+                    onBlur={() => saveEdit(todo.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        saveEdit(todo.id);
+                      }
+                    }}
+                  />
+                ) : (
+                  <span
+                    className={
+                      todo.completed
+                        ? "todo-text completed"
+                        : "todo-text"
+                    }
+                    onClick={() => startEditing(todo)}
+                  >
+                    {todo.text}
+                  </span>
+                )}
+
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteTodo(todo.id)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            ))
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="stats">
+          <span>Total: {todos.length}</span>
+
+          <span>
+            Completadas:{" "}
+            {todos.filter((todo) => todo.completed).length}
+          </span>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
