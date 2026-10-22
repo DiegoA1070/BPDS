@@ -64,6 +64,7 @@ body {
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  background-color: #fff;
 }
 
 .todo-item input[type="checkbox"] {
@@ -112,7 +113,7 @@ body {
 .empty {
   text-align: center;
   color: #888;
-  padding: 25px;
+  padding: 15px;
 }
 
 .stats {
@@ -120,10 +121,59 @@ body {
   justify-content: space-between;
   margin-top: 25px;
   padding-top: 15px;
-  border-top: 1px solid #555;
+  border-top: 1px solid #aaa;
   color: #555;
 }
 
+/* =========================================
+   ESTILOS PARA LA SECCIÓN DE LA PAPELERA
+   ========================================= */
+
+.deleted-section {
+  margin-top: 35px;
+  padding-top: 20px;
+  border-top: 2px dashed #aaa;
+}
+
+.deleted-section h2 {
+  font-size: 18px;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.deleted-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deleted-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.deleted-text {
+  text-decoration: line-through;
+  color: #777;
+  font-size: 15px;
+}
+
+.deleted-badge {
+  font-size: 12px;
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #f5c6cb;
+  font-weight: bold;
+}
+
+/* Responsivo */
 @media (max-width: 600px) {
   .todo-item {
     flex-wrap: wrap;
@@ -136,5 +186,10 @@ body {
   .stats {
     flex-direction: column;
     gap: 5px;
+  }
+
+  .deleted-item {
+    flex-direction: row;
+    justify-content: space-between;
   }
 }

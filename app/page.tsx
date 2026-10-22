@@ -14,6 +14,9 @@ export default function Home() {
     { id: 2, text: "Second Example", completed: true },
   ]);
 
+  // Estado para la Papelera de Reciclaje
+  const [deletedTodos, setDeletedTodos] = useState<Todo[]>([]);
+
   const [newTodo, setNewTodo] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingText, setEditingText] = useState("");
@@ -67,9 +70,13 @@ export default function Home() {
     setEditingId(null);
   };
 
-  // DELETE
+  // DELETE - Modificado para mover a la papelera antes de eliminar de la lista principal
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const todoToDelete = todos.find((todo) => todo.id === id);
+    if (todoToDelete) {
+      setDeletedTodos([...deletedTodos, todoToDelete]);
+      setTodos(todos.filter((todo) => todo.id !== id));
+    }
   };
 
   return (
@@ -92,7 +99,7 @@ export default function Home() {
 
         <div className="todo-list">
           {todos.length === 0 ? (
-            <p className="empty">No hay tareas.</p>
+            <p className="empty">No hay tareas pendientes.</p>
           ) : (
             todos.map((todo) => (
               <div className="todo-item" key={todo.id}>
@@ -149,6 +156,23 @@ export default function Home() {
             Completadas:{" "}
             {todos.filter((todo) => todo.completed).length}
           </span>
+        </div>
+
+        {/* NUEVA SECCIÓN: Papelera de Tareas Eliminadas */}
+        <div className="deleted-section">
+          <h2>Tareas Eliminadas</h2>
+          {deletedTodos.length === 0 ? (
+            <p className="empty">La papelera está vacía.</p>
+          ) : (
+            <div className="deleted-list">
+              {deletedTodos.map((todo) => (
+                <div className="deleted-item" key={todo.id}>
+                  <span className="deleted-text">{todo.text}</span>
+                  <span className="deleted-badge">Eliminada</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>
