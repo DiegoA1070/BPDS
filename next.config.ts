@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig = {
-  output: 'export',
-  images: { unoptimized: true
+output: 'export',
+images: { unoptimized: true
         },
-  assetPrefix: process.env.ASSET_PREFIX || undefined,
+assetPrefix: process.env.ASSET_PREFIX || undefined,
   
 };
 
