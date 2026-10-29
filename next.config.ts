@@ -1,11 +1,8 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
   output: 'export',
-  images: { 
-    unoptimized: true 
-  },
+  images: { unoptimized: true },
   assetPrefix: process.env.ASSET_PREFIX || undefined,
 };
 
